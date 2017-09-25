@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
-
-import Footer from '../Footer/Footer';
-import Nav from '../Nav/Nav';
-
 import { Switch, Route } from 'react-router-dom';
 
+/* Components Rendered on Page */
+import Nav from '../Nav/Nav';
+import Footer from '../Footer/Footer';
 import Dashboard from '../Dashboard/Dashboard';
 import NotFound from '../NotFound/NotFound';
-
-import './App.sass';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <div>
         <Nav />
 
         <Switch>

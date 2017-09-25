@@ -4,7 +4,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 import Routes from './routes'
 
-import './index.sass';
+import './Global.sass'
 
 ReactDOM.render(
     <Routes />,
