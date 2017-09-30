@@ -5,7 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 import Dashboard from '../Dashboard/Dashboard';
-import Login from '../Login/Login';
+import {Login} from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
 
 class App extends Component {
