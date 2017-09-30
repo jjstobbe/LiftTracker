@@ -21,7 +21,7 @@ export default class Login extends React.Component {
 
   handleSubmit(e) {
     if(this.state.username.trim() !== '' && this.state.password.trim() !== ''){
-      APIHelpers.login(this.state.username, this.state.password, '/exercises');
+      APIHelpers.login(this.state.username, this.state.password, '/exercise');
     }
     e.preventDefault();
   }
