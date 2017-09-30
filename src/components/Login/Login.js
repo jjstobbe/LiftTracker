@@ -1,7 +1,9 @@
 import React from 'react'
+import APIHelpers from '../../helpers/API.js';
+
 import './Login.sass'
 
-export class Login extends React.Component {
+export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,7 +20,9 @@ export class Login extends React.Component {
   }
 
   handleSubmit(e) {
-    // Call an API to login with this.state.username and this.state.password
+    if(this.state.username.trim() !== '' && this.state.password.trim() !== ''){
+      APIHelpers.login(this.state.username, this.state.password, '/exercises');
+    }
     e.preventDefault();
   }
 

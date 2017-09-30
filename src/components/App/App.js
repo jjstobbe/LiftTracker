@@ -4,8 +4,8 @@ import { Switch, Route } from 'react-router-dom';
 /* Components Rendered on Page */
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
-import Dashboard from '../Dashboard/Dashboard';
-import {Login} from '../Login/Login';
+import List from '../List/List';
+import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
 
 class App extends Component {
@@ -15,7 +15,7 @@ class App extends Component {
         <Nav />
 
         <Switch>
-          <Route exact path="/" component={Dashboard} />
+          <Route exact path="/" component={List} />
           <Route exact path="/login" component={Login} />
           <Route component={NotFound} />
         </Switch>
