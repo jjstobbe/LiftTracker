@@ -25,6 +25,10 @@ export default {
   postExercise(data) {
     var dataObject = JSON.stringify(data); 
     return call('POST','https://baas.kinvey.com/appdata/kid_BJFBIVmX-/Exercises', dataObject);
+  },
+  updateExercise(data) {
+    var dataObject = JSON.stringify(data);
+    return call('PUT','https://baas.kinvey.com/appdata/kid_BJFBIVmX-/Exercises/'+data.id, dataObject);
   }
 }
 

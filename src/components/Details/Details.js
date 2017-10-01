@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import APIHelpers from '../../helpers/API.js'
 import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, ResponsiveContainer } from 'recharts'
 import ReactTable from 'react-table'
+import APIHelpers from '../../helpers/API.js'
 import 'react-table/react-table.css'
 import moment from 'moment'
 
@@ -25,50 +25,71 @@ export default class Details extends Component {
       }, {
         Header: 'Date',
         accessor: 'date',
-      }]
+      }],
+      weight: -1,
+      reps: -1
     };
 
     this.parseData = this.parseData.bind(this);
+    this.updateExercise = this.updateExercise.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  updateExercise(e){
+    if(this.state.reps > -1 && this.state.weight > -1){
+      APIHelpers.updateExercise({
+        id: this.state.id,
+        title: this.state.filteredData.title,
+        weight: this.state.filteredData.weight.concat([this.state.weight]),
+        reps: this.state.filteredData.reps.concat([this.state.reps]),
+        date: this.state.filteredData.date.concat([moment().format('LLLL')])
+      });
+    }
+    e.preventDefault();
   }
 
   parseData(data){
-    console.log(data);
     var filteredData = [];
     var listData = [];
 
-    filteredData = data.filter((exercise)=> {
+    // Filtered Data contains only the details for this exercise
+    var filteredDataArray = data.filter((exercise)=> {
       return exercise._id === this.state.id;
     });
 
-    if(filteredData.length == 1){
+    if(filteredDataArray.length === 1){
+      filteredData = filteredDataArray[0];
       this.setState({
-        title: filteredData[0].title
+        filteredData: filteredData,
+        title: filteredData.title
       });
     }
 
-    for(var i = 0;i< data[0].weight.length;i++){
+    for(var i = 0;i< filteredData.weight.length;i++){
       listData[i] = {
-        weight:  data[0].weight[i],
-        reps:  data[0].reps[i],
-        date: moment( data[0].date[i], "MM-DD-YYYY").fromNow()
+        weight:  filteredData.weight[i],
+        reps:  filteredData.reps[i],
+        date: moment( filteredData.date[i], "LLLL").fromNow()
       }
     }
 
     this.setState({
-      filteredData: filteredData,
       listData: listData
     });
   }
 
   componentDidMount() {
-    console.log(this.props);
     if(this.props.data.length > 0)
       this.parseData(this.props.data);
   }
 
   componentWillReceiveProps(props){
-    console.log(props);
     this.parseData(props.data);
+  }
+
+  handleChange(event) {
+    console.log(event.target.value);
+    this.setState({[event.target.name]: event.target.value});
   }
 
   render() {
@@ -89,6 +110,14 @@ export default class Details extends Component {
             </LineChart>
           </ ResponsiveContainer>
         </div>
+
+        <form id="updateExercise" onSubmit={this.updateExercise}>
+          <input name="weight" type="number" placeholder="Weight" required 
+            value={this.state.weight} onChange={this.handleChange} />
+          <input name="reps" type="number" placeholder="Reps" required 
+            value={this.state.reps} onChange={this.handleChange} />
+          <button type="submit">Submmit</button>
+        </form>
 
         <div id="TableContainer">
           <ReactTable
