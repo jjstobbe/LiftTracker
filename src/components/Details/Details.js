@@ -11,8 +11,6 @@ export default class Details extends Component {
   constructor(props) {
     super(props);
 
-    console.log(props.match.params.id);
-
     this.state = {
       id: props.match.params.id,
       title: '',
@@ -39,12 +37,8 @@ export default class Details extends Component {
       var listData = [];
 
       filteredData = data.filter((exercise)=> {
-        console.log(exercise._id);
-        console.log(this.state.id);
         return exercise._id === this.state.id;
       });
-
-      console.log(filteredData);
 
       if(filteredData.length == 1){
         this.setState({
