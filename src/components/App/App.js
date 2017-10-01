@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 /* Components Rendered on Page */
-import Nav from '../Nav/Nav';
-import Footer from '../Footer/Footer';
-import Exercise from '../Exercise/Exercise';
-import Login from '../Login/Login';
-import NotFound from '../NotFound/NotFound';
+import Nav from '../Nav/Nav'
+import Footer from '../Footer/Footer'
+import ExerciseRouter from './ExerciseRouter'
+import Login from '../Login/Login'
+import NotFound from '../NotFound/NotFound'
 
 class App extends Component {
   render() {
@@ -15,12 +15,10 @@ class App extends Component {
         <Nav />
 
         <Switch>
-          <Route path="/exercise" component={Exercise} />
+          <Route path="/exercise" component={ExerciseRouter} />
           <Route path="/login" component={Login} />
           <Route component={NotFound} />
         </Switch>
-
-        <Footer />
       </div>
     );
   }

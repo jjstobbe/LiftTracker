@@ -21,7 +21,13 @@ export default class FullList extends Component {
         weight: 420,
         reps: 10,
         date: new Date(),
-        _id: 1
+        _id: '59d079cc57f0e7db0452cbd7'
+      },{
+        title: 'Squats',
+        weight: 420,
+        reps: 10,
+        date: new Date(),
+        _id: '123'
       }]
     });
     /*

@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import FullList from '../FullList/FullList'
 import Details from '../Details/Details'
 
-export default class Exercise extends Component {
+export default class ExerciseRouter extends Component {
   render() {
     return (
       <Switch>
