@@ -6,9 +6,8 @@ export default class Nav extends Component {
   render() {
     return (
       <ul id="Nav">
-        <li><Link to='/'>Home</Link></li>
-        <li><Link to='/Progress'>Progress</Link></li>
-        <li><Link to='/Add'>Add</Link></li>
+        <li><Link to='/Add/'>Add</Link></li>
+        <li><Link to='/Exercise'>List</Link></li>
       </ul>
     );
   }

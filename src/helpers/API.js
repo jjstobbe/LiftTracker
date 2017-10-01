@@ -11,8 +11,11 @@ export default {
           "Authorization": "Basic " + btoa(username+":"+password),
           "Content-Type": "application/json"
         },success: function(data){
-            document.cookie = "authToken="+data._kmd.authtoken;
-            window.location.href = location;
+          document.cookie = "authToken="+data._kmd.authtoken;
+          window.location.href = location;
+        },error: function(data){
+          console.error(data);
+          window.location.href = "/login"
         }
       });
   },
@@ -35,6 +38,9 @@ function call(type, url, data) {
     headers: {
       "Authorization": 'Kinvey ' + document.cookie.substring(document.cookie.indexOf('=')+1),
       "X-Kinvey-API-Version": '3',
+    }, error: function(data) {
+      console.error(data);
+      window.location.href = "/login"
     }
   });
 }

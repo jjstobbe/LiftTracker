@@ -12,8 +12,8 @@ export default class Details extends Component {
     super(props);
 
     this.state = {
-      id: props.match.params.id,
-      title: '',
+      id: window.location.href.substr(window.location.href.lastIndexOf('/') + 1),
+      title: 'Not found',
       filteredData: [],
       listData: [],
       columns: [{
@@ -26,39 +26,49 @@ export default class Details extends Component {
         Header: 'Date',
         accessor: 'date',
       }]
+    };
+
+    this.parseData = this.parseData.bind(this);
+  }
+
+  parseData(data){
+    console.log(data);
+    var filteredData = [];
+    var listData = [];
+
+    filteredData = data.filter((exercise)=> {
+      return exercise._id === this.state.id;
+    });
+
+    if(filteredData.length == 1){
+      this.setState({
+        title: filteredData[0].title
+      });
     }
+
+    for(var i = 0;i< data[0].weight.length;i++){
+      listData[i] = {
+        weight:  data[0].weight[i],
+        reps:  data[0].reps[i],
+        date: moment( data[0].date[i], "MM-DD-YYYY").fromNow()
+      }
+    }
+
+    this.setState({
+      filteredData: filteredData,
+      listData: listData
+    });
   }
 
   componentDidMount() {
-    //Example data to not hit the API a lot.
-    var promise = APIHelpers.getAllExercises();
-    promise.then((data) => {
-      var filteredData = [];
-      var listData = [];
+    console.log(this.props);
+    if(this.props.data.length > 0)
+      this.parseData(this.props.data);
+  }
 
-      filteredData = data.filter((exercise)=> {
-        return exercise._id === this.state.id;
-      });
-
-      if(filteredData.length == 1){
-        this.setState({
-          title: filteredData[0].title
-        });
-      }
-
-      for(var i = 0;i<data[0].weight.length;i++){
-        listData[i] = {
-          weight: data[0].weight[i],
-          reps: data[0].reps[i],
-          date: moment(data[0].date[i], "MM-DD-YYYY").fromNow()
-        }
-      }
-
-      this.setState({
-        filteredData: filteredData,
-        listData: listData
-      });
-    });
+  componentWillReceiveProps(props){
+    console.log(props);
+    this.parseData(props.data);
   }
 
   render() {
