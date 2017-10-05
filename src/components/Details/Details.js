@@ -31,13 +31,13 @@ export default class Details extends Component {
     };
 
     this.parseData = this.parseData.bind(this);
-    this.updateExercise = this.updateExercise.bind(this);
+    this.addRow = this.addRow.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.deleteRow = this.deleteRow.bind(this);
   }
 
-  updateExercise(e){
+  addRow(e){
     if(this.state.reps > -1 && this.state.weight > -1){
-      console.log(this.state.filteredData);
       var updatedExercise = {
         id: this.state.id,
         _id: this.state.id,
@@ -48,27 +48,49 @@ export default class Details extends Component {
       };
       APIHelpers.updateExercise(updatedExercise);
 
-      console.log(updatedExercise);
-
       var updatedData = this.props.data.map((exercise)=>{
-        console.log(exercise._id === this.state.id);
         if(exercise._id === this.state.id){
           return updatedExercise;
         }else{
           return exercise;
         }
       });
-
-      console.log(updatedData);
-
       this.parseData(updatedData);
     }
 
     e.preventDefault();
   }
 
+  deleteRow(row){
+    var updatedFilteredData = this.state.filteredData;
+    updatedFilteredData.weight.splice(row._index,1);
+    updatedFilteredData.reps.splice(row._index,1);
+    updatedFilteredData.date.splice(row._index,1);
+
+    this.setState({
+      filteredData: updatedFilteredData
+    });
+
+    var updatedExercise = {
+      id: this.state.id,
+      _id: this.state.id,
+      title: this.state.filteredData.title,
+      weight: this.state.filteredData.weight,
+      reps: this.state.filteredData.reps,
+      date: this.state.filteredData.date
+    };
+    APIHelpers.updateExercise(updatedExercise);
+    var updatedData = this.props.data.map((exercise)=>{
+      if(exercise._id === this.state.id){
+        return updatedExercise;
+      }else{
+        return exercise;
+      }
+    });
+    this.parseData(updatedData);
+  }
+
   parseData(data){
-    console.log(data);
     var filteredData = [];
     var listData = [];
 
@@ -99,8 +121,9 @@ export default class Details extends Component {
   }
 
   componentDidMount() {
-    if(this.props.data.length > 0)
+    if(this.props.data.length > 0){
       this.parseData(this.props.data);
+    }
   }
 
   componentWillReceiveProps(props){
@@ -116,14 +139,14 @@ export default class Details extends Component {
       <div id="Details">
         <h1>{this.state.title}</h1>
         <div id="GraphContainer">
-          <ResponsiveContainer>
+          <ResponsiveContainer >
             <LineChart data={this.state.listData.map((row) => {
               row.date = moment(row.date, "LLLL").fromNow();
               return row;
             })}
             margin={{top: 5, right: 30, left: 20, bottom: 5}}>
               <XAxis dataKey="date"/>
-              <YAxis/>
+              <YAxis />
               <CartesianGrid strokeDasharray="3 3"/>
               <Tooltip />
               <Legend />
@@ -133,7 +156,7 @@ export default class Details extends Component {
           </ ResponsiveContainer>
         </div>
 
-        <form id="updateExercise" onSubmit={this.updateExercise}>
+        <form id="addRow" onSubmit={this.addRow}>
           <input name="weight" type="number" placeholder="Weight" required 
             value={this.state.weight} onChange={this.handleChange} />
           <input name="reps" type="number" placeholder="Reps" required 
@@ -145,6 +168,12 @@ export default class Details extends Component {
           <ReactTable
             data={this.state.listData}
             columns={this.state.columns}
+            getTdProps={(state, rowInfo, column, instance) => {
+            return {
+              onDoubleClick: e =>
+                this.deleteRow(rowInfo.row)
+            };
+          }}
             className="-striped -highlight"
           />
         </div>
