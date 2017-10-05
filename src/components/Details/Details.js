@@ -13,7 +13,6 @@ export default class Details extends Component {
 
     this.state = {
       id: window.location.href.substr(window.location.href.lastIndexOf('/') + 1),
-      title: 'Not found',
       filteredData: [],
       listData: [],
       columns: [{
@@ -44,7 +43,7 @@ export default class Details extends Component {
         title: this.state.filteredData.title,
         weight: this.state.filteredData.weight.concat([this.state.weight]),
         reps: this.state.filteredData.reps.concat([this.state.reps]),
-        date: this.state.filteredData.date.concat([moment().format('LLLL')])
+        date: this.state.filteredData.date.concat([moment().unix()])
       };
       APIHelpers.updateExercise(updatedExercise);
 
@@ -102,8 +101,7 @@ export default class Details extends Component {
     if(filteredDataArray.length === 1){
       filteredData = filteredDataArray[0];
       this.setState({
-        filteredData: filteredData,
-        title: filteredData.title
+        filteredData: filteredData
       });
 
       for(var i = 0;i< filteredData.weight.length;i++){
@@ -131,18 +129,21 @@ export default class Details extends Component {
   }
 
   handleChange(event) {
-    this.setState({[event.target.name]: event.target.value});
+    this.setState({[event.target.name]: parseInt(event.target.value)});
   }
 
   render() {
     return (
       <div id="Details">
-        <h1>{this.state.title}</h1>
+        <h1>{this.state.filteredData.title}</h1>
         <div id="GraphContainer">
           <ResponsiveContainer >
             <LineChart data={this.state.listData.map((row) => {
-              row.date = moment(row.date, "LLLL").fromNow();
-              return row;
+              return {
+                weight: row.weight,
+                reps: row.reps,
+                date: moment.unix(row.date).fromNow()
+              }
             })}
             margin={{top: 5, right: 30, left: 20, bottom: 5}}>
               <XAxis dataKey="date"/>
@@ -157,16 +158,22 @@ export default class Details extends Component {
         </div>
 
         <form id="addRow" onSubmit={this.addRow}>
-          <input name="weight" type="number" placeholder="Weight" required 
-            value={this.state.weight} onChange={this.handleChange} />
-          <input name="reps" type="number" placeholder="Reps" required 
-            value={this.state.reps} onChange={this.handleChange} />
-          <button type="submit">Submmit</button>
+          <input id="weight" name="weight" type="number" placeholder="Weight" required 
+            value={this.state.weight > -1 ? this.state.weight : ''} onChange={this.handleChange} />
+          <input id="reps" name="reps" type="number" placeholder="Reps" required 
+            value={this.state.reps > -1 ? this.state.reps : ''} onChange={this.handleChange} />
+          <button type="submit">Submit</button>
         </form>
 
         <div id="TableContainer">
           <ReactTable
-            data={this.state.listData}
+            data={this.state.listData.map((row) => {
+              return {
+                weight: row.weight,
+                reps: row.reps,
+                date: moment.unix(row.date).fromNow()
+              }
+            })}
             columns={this.state.columns}
             getTdProps={(state, rowInfo, column, instance) => {
             return {
