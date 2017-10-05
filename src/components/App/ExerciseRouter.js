@@ -24,8 +24,8 @@ export default class ExerciseRouter extends Component {
   render() {
     return (
       <Switch>
-        <Route exact path='/exercise' render={()=><FullList data={this.state.data} />} />
-        <Route path='/exercise/:id' render={()=><Details data={this.state.data} />} />
+        <Route exact path='/Exercise' render={()=><FullList data={this.state.data} />} />
+        <Route path='/Exercise/:id' render={()=><Details data={this.state.data} />} />
       </Switch>
     );
   }

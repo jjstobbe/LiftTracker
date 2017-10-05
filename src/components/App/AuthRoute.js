@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import APIHelpers from '../../helpers/API.js'
 import Login from '../Login/Login'
-
 
 const AuthRoute = ({component, ...props}) => {
   if (APIHelpers.isAuthenticated()) {
     return <Route { ...props } component={ component } />
   } else {
-    return <Route exact path="/Login" component={ Login } />
+    if(props.location.pathname === "/Login"){
+      return <Route exact path="/Login" component={ Login } />
+    }
+    return <Redirect to={ '/Login' } />
   }
 };
 

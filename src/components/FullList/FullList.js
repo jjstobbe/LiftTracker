@@ -9,11 +9,43 @@ export default class FullList extends Component {
     super(props);
     
     this.state = {
-      title: ''
+      title: '',
+      exercises: [],
+      exercisesFiltered: [],
+      filterText: ''
     }
     
     this.addExercise = this.addExercise.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.filterExercises = this.filterExercises.bind(this);
+  }
+
+  filterExercises(e) {
+    var filterText = e.target.value.toLowerCase();
+    var filteredExercises = this.state.exercises.filter((exercise) => {
+      return exercise.title.toLowerCase().includes(filterText);
+    });
+
+    this.setState({
+      filterText: filterText,
+      exercisesFiltered: filteredExercises
+    })
+  }
+
+  componentWillReceiveProps(props){
+    this.setState({
+      exercises: props.data,
+      exercisesFiltered: props.data
+    });
+  }
+
+  componentDidMount() {
+    if(this.props.data.length > 0){
+      this.setState({
+        exercises: this.props.data,
+        exercisesFiltered: this.props.data
+      });
+    }
   }
 
   addExercise(e){
@@ -26,8 +58,10 @@ export default class FullList extends Component {
     });
 
     promise.then((data)=>{
-      
-      // Add it to the list somehow. Probably move props to state or something.
+      this.setState({
+        exercises: this.state.exercises.concat([data]),
+        exercisesFiltered: this.state.exercisesFiltered.concat([data])
+      })
     });
   }
 
@@ -39,18 +73,20 @@ export default class FullList extends Component {
     return (
       <div id="FullList">
         <div id="Exercises">
+        <input id="Filter" type="text" placeholder="Search"
+          value={this.state.filterText} onChange={this.filterExercises} />
         {
-          this.props.data.map((exercise)=>
+          this.state.exercisesFiltered.map((exercise)=>
           <Link to={{pathname: `exercise/${exercise._id}`, query: { id: exercise._id }}} key={exercise._id} >
           <div className="exercise">
             <li className="title">{exercise.title}</li>
             <li className="weight">
               <label>Weight: </label>
-              <span>{exercise.weight}</span>
+              <span>{Math.max(...exercise.weight)}</span>
             </li>
             <li className="reps">
               <label>Reps: </label>
-              <span>{exercise.reps}</span>
+              <span>{Math.max(...exercise.reps)}</span>
             </li>
           </div>
           </Link>
