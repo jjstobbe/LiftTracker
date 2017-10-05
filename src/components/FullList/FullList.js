@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { Link, Route } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import APIHelpers from '../../helpers/API.js'
-import Details from '../Details/Details'
 
 import './FullList.sass';
 

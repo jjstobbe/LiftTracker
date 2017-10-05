@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 export default {
-  login(username, password, location="/home") {
+  login(username, password, location="/Exercise") {
       var dataObject = JSON.stringify({username: username, password: password}); 
       $.ajax({
         type: "POST",
@@ -11,11 +11,10 @@ export default {
           "Authorization": "Basic " + btoa(username+":"+password),
           "Content-Type": "application/json"
         },success: function(data){
-          document.cookie = "authToken="+data._kmd.authtoken;
+          document.cookie = "jjstobbe_Auth="+data._kmd.authtoken;
           window.location.href = location;
         },error: function(data){
           console.error(data);
-          window.location.href = "/login"
         }
       });
   },
@@ -29,6 +28,9 @@ export default {
   updateExercise(data) {
     var dataObject = JSON.stringify(data);
     return call('PUT','https://baas.kinvey.com/appdata/kid_BJFBIVmX-/Exercises/'+data.id, dataObject);
+  },
+  isAuthenticated(){
+    return document.cookie.indexOf('jjstobbe_Auth=') !== -1;
   }
 }
 
@@ -40,11 +42,26 @@ function call(type, url, data) {
     dataType: 'json',
     data: data,
     headers: {
-      "Authorization": 'Kinvey ' + document.cookie.substring(document.cookie.indexOf('=')+1),
+      "Authorization": 'Kinvey ' + getCookie('jjstobbe_Auth'),
       "X-Kinvey-API-Version": '3',
     }, error: function(data) {
       console.error(data);
-      window.location.href = "/login"
     }
   });
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') {
+          c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+          return c.substring(name.length, c.length);
+      }
+  }
+  return "";
 }
