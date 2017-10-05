@@ -37,18 +37,38 @@ export default class Details extends Component {
 
   updateExercise(e){
     if(this.state.reps > -1 && this.state.weight > -1){
-      APIHelpers.updateExercise({
+      console.log(this.state.filteredData);
+      var updatedExercise = {
         id: this.state.id,
+        _id: this.state.id,
         title: this.state.filteredData.title,
         weight: this.state.filteredData.weight.concat([this.state.weight]),
         reps: this.state.filteredData.reps.concat([this.state.reps]),
         date: this.state.filteredData.date.concat([moment().format('LLLL')])
+      };
+      APIHelpers.updateExercise(updatedExercise);
+
+      console.log(updatedExercise);
+
+      var updatedData = this.props.data.map((exercise)=>{
+        console.log(exercise._id === this.state.id);
+        if(exercise._id === this.state.id){
+          return updatedExercise;
+        }else{
+          return exercise;
+        }
       });
+
+      console.log(updatedData);
+
+      this.parseData(updatedData);
     }
+
     e.preventDefault();
   }
 
   parseData(data){
+    console.log(data);
     var filteredData = [];
     var listData = [];
 
@@ -63,19 +83,19 @@ export default class Details extends Component {
         filteredData: filteredData,
         title: filteredData.title
       });
-    }
 
-    for(var i = 0;i< filteredData.weight.length;i++){
-      listData[i] = {
-        weight:  filteredData.weight[i],
-        reps:  filteredData.reps[i],
-        date: moment( filteredData.date[i], "LLLL").fromNow()
+      for(var i = 0;i< filteredData.weight.length;i++){
+        listData[i] = {
+          weight:  filteredData.weight[i],
+          reps:  filteredData.reps[i],
+          date: filteredData.date[i]
+        }
       }
-    }
 
-    this.setState({
-      listData: listData
-    });
+      this.setState({
+        listData: listData
+      });
+    }
   }
 
   componentDidMount() {
@@ -88,7 +108,6 @@ export default class Details extends Component {
   }
 
   handleChange(event) {
-    console.log(event.target.value);
     this.setState({[event.target.name]: event.target.value});
   }
 
@@ -98,7 +117,10 @@ export default class Details extends Component {
         <h1>{this.state.title}</h1>
         <div id="GraphContainer">
           <ResponsiveContainer>
-            <LineChart data={this.state.listData}
+            <LineChart data={this.state.listData.map((row) => {
+              row.date = moment(row.date, "LLLL").fromNow();
+              return row;
+            })}
             margin={{top: 5, right: 30, left: 20, bottom: 5}}>
               <XAxis dataKey="date"/>
               <YAxis/>
