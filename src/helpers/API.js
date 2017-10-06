@@ -29,6 +29,17 @@ export default {
     var dataObject = JSON.stringify(data);
     return call('PUT','https://baas.kinvey.com/appdata/kid_BJFBIVmX-/Exercises/'+data.id, dataObject);
   },
+  getAllWeight(){
+    return call('GET', 'https://baas.kinvey.com/appdata/kid_BJFBIVmX-/Weight', null);
+  },
+  postWeight(data){
+    var dataObject = JSON.stringify(data); 
+    return call('POST','https://baas.kinvey.com/appdata/kid_BJFBIVmX-/Weight', dataObject);
+  },
+  deleteWeight(data){
+    console.log(data);
+    return call('DELETE','https://baas.kinvey.com/appdata/kid_BJFBIVmX-/Weight/'+data._id, null);
+  },
   isAuthenticated(){
     return document.cookie.indexOf('jjstobbe_Auth=') !== -1;
   }

@@ -6,12 +6,14 @@ import Route from './AuthRoute'
 import ExerciseRouter from './ExerciseRouter'
 import Analytics from '../Analytics/Analytics'
 import Login from '../Login/Login'
+import Weight from '../Weight/Weight'
 
 class App extends Component {
   render() {
     return (
       <div>
         <Switch>
+          <Route exact path='/Weight' component={ Weight } />
           <Route exact path="/Analytics" component={ Analytics } />
           <Route path="/Exercise" component={ ExerciseRouter } />
           <Route exact path="/Login" component={ Login } />

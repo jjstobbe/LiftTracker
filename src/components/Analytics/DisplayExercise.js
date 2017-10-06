@@ -11,7 +11,6 @@ export default class DisplayExercise extends Component {
   }
 
   componentWillReceiveProps(props){
-    console.log(props);
     this.setState({
       exercise: props.exercise,
       field: props.field
@@ -22,9 +21,9 @@ export default class DisplayExercise extends Component {
   render() {
     return (
       <div>
-        <h2>{ this.state.field != '' ? this.state.field : ''}</h2>
-        <h4>{ this.state.exercise && this.state.exercise.title ? this.state.exercise.title : ''}</h4>
-        <p>{ this.state.exercise && this.state.exercise[this.state.field] ? Math.max(...this.state.exercise[this.state.field]) : ''}</p>
+        <h2> Maximum { this.state.field !== '' ? this.state.field : '' }</h2>
+        <h4>{ this.state.exercise && this.state.exercise.title ? this.state.exercise.title : '' }</h4>
+        <p>{ this.state.exercise && this.state.exercise[this.state.field] ? Math.max(...this.state.exercise[this.state.field]) : '' }</p>
       </div>
     );
   }
