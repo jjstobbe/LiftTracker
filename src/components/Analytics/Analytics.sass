@@ -1,1 +1,48 @@
 @import '../../Variables.sass'
+
+#Analytics
+    h1
+        text-align: center
+        padding: 20px
+        background-color: #222222
+        color: white
+        margin: 0
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+
+    #LiftingMaxes
+        margin: 0 auto
+        text-align: center
+
+        h4
+            font-size: 18px
+        
+        .Max
+            padding-bottom: 20px
+            border-bottom: 1px solid rgba(#222, 0.2)
+
+    #ExercisesLeftList
+        width: 20%
+        min-width: 100px
+        display: inline-block
+
+        span
+            width: 100px
+            height: 50px
+            text-align: left
+            display: block
+            cursor: pointer
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+            line-height: 50px
+            text-align: center
+            border-radius: 2px
+            background-color: rgba($PrimaryBlue, 0.1)
+            transition: all 0.3s cubic-bezier(.25,.8,.25,1)
+
+        span:hover
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)
+
+    #ExerciseDetails
+        width: 80%
+        background-color: blue
+        display: inline-block
+        height: 500px

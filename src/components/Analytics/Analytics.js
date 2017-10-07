@@ -11,21 +11,23 @@ export default class Analytics extends Component {
 
     this.state = {
       exercises: [],
-      selectedExercise: {},
+      selectedExercise: null,
       maxWeight: {},
       maxReps: {}
     };
 
     this.getMaxExercise = this.getMaxExercise.bind(this);
     this.getRateOfChange = this.getRateOfChange.bind(this);
+    this.selectExercise = this.selectExercise.bind(this);
   }
 
   componentDidMount() {
     APIHelpers.getAllExercises().then((data) => {
       this.setState({
+        exercises: data,
         maxWeight: this.getMaxExercise(data, 'weight'),
         maxReps: this.getMaxExercise(data, 'reps'),
-        selectedExercise: data[0]
+        selectedExercise: data[0],
       });
 
       this.getRateOfChange(data[0]);
@@ -59,12 +61,35 @@ export default class Analytics extends Component {
     return maxObject;
   }
 
+  selectExercise(exercise){
+    if(exercise){
+      this.setState({
+        selectedExercise: exercise
+      });
+    }
+  }
+
   render() {
     return (
       <div id="Analytics">
-        <h1>Analytics</h1>
-        <DisplayExercise exercise={this.state.maxWeight} field={'weight'} />
-        <DisplayExercise exercise={this.state.maxReps} field={'reps'} />
+        <h1>Lifting Analytics</h1>
+        <div id="LiftingMaxes">
+          <DisplayExercise exercise={this.state.maxWeight} field={'weight'} />
+          <DisplayExercise exercise={this.state.maxReps} field={'reps'} />
+        </div>
+        <div id="ExercisesLeftList">
+          {
+            this.state.exercises.map((exercise)=>
+            <span key={exercise._id} className="title" onClick={() => this.selectExercise(exercise)}>{exercise.title}</span>
+            )
+          }
+        </div>
+        <div id="ExerciseDetails">
+          <h1>{ this.state.selectedExercise && this.state.selectedExercise.title ? this.state.selectedExercise : '' }</h1>
+          <div>
+            { this.state.selectedExercise ? this.getRateOfChange(this.state.selectedExercise) : '' }
+          </div>
+        </div>
       </div>
     );
   }
